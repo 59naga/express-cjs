@@ -1,7 +1,5 @@
 # ExpressCjs [![NPM version][npm-image]][npm] [![Build Status][travis-image]][travis] [![Coverage Status][coveralls-image]][coveralls]
 
-[![Sauce Test Status][sauce-image]][sauce]
-
 > coffee-script / jade / stylus(with kouto-swiss) middleware for Single Page Application using Express4
 
 ## Quick usage
