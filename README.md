@@ -54,7 +54,7 @@ cjs .
 ### `expressCjs({root,staticServe})` -> middleware
 
 * If GET `/` to parse `/index.jade`
-* If GET `/index.js` to parse `/index.styl`
+* If GET `/index.js` to parse `/index.coffee`
 * If GET `/index.css` to parse `/index.styl`
 * Otherwise as static serve
 
