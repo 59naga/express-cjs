@@ -1,9 +1,11 @@
 {
   "name": "express-cjs",
-  "version": "0.0.0-alpha",
+  "version": "0.0.0",
   "description": "coffee-script / jade / stylus(with kouto-swiss) middlewares for Single Page Application using Express4",
 
-  "bin": "cjs",
+  "bin": {
+    "cjs": "cjs"
+  },
   "files": [
     "cjs",
     "index.js",
