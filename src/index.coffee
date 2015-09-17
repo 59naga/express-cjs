@@ -31,7 +31,6 @@ expressCjs= ({root,debug,staticServe}={})->
     res.end content
 
   # /index.js
-  browserify.settings.production 'minify',false
   browserify.settings 'transform',[
     'coffeeify'
     'browserify-plain-jade'
