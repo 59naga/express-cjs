@@ -55,7 +55,7 @@ expressCjs= ({root,debug,staticServe}={})->
     stylus stylData
     .set 'filename',styl
     .set 'sourcemap',{inline:yes}
-    .set 'compress',yes
+    .set 'compress',not debug
     .use koutoSwiss()
     .import 'kouto-swiss'
     .render (error,css)->

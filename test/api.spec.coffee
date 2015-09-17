@@ -6,6 +6,7 @@ supertest= require 'supertest'
 path= require 'path'
 
 # Environment
+process.env.NODE_ENV= 'production'
 jasmine.DEFAULT_TIMEOUT_INTERVAL= 5000
 PORT= 59798
 root= path.join __dirname,'fixtures'
@@ -24,7 +25,7 @@ describe 'expressCjs',->
 
   it 'GET /',(done)->
     # coffeelint: disable=max_line_length
-    regexp= '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8"/>\n    <title>Document</title>\n  </head>\n  <body></body>\n</html>'
+    regexp= '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><title>Document</title></head><body></body></html>'
     # coffeelint: enable=max_line_length
 
     supertest app

@@ -51,7 +51,7 @@ cjs .
 
 ## API
 
-### `expressCjs({root,staticServe})` -> middleware
+### `expressCjs({root,debug,staticServe})` -> middleware
 
 * If GET `/` to parse `/index.jade`
 * If GET `/index.js` to parse `/index.coffee`
@@ -69,6 +69,7 @@ if(process.env.PORT===undefined){
 }
 var options= {
   root: process.cwd(),
+  debug: process.env.NODE_ENV==='production',
   staticServe: true,// if false then disable static serve
 };
 

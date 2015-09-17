@@ -7,7 +7,7 @@ var minimist= require('minimist');
 var path= require('path');
 
 // Environment
-var args= minimist(process.argv.slice(2))._;
+var args= minimist(process.argv.slice(2))._;// eg: `$ cjs . foo` -> args[0] === 'foo'
 
 var options= {}
 options.root= process.cwd();
