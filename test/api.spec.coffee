@@ -48,6 +48,7 @@ describe 'expressCjs',->
     .expect 'Content-type','application/javascript'
     .expect regexps[0]
     .expect regexps[1]
+    .expect regexps[2]
     .end (error,response)->
       if error then done.fail error else done()
 
