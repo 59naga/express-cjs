@@ -31,6 +31,7 @@ expressCjs= ({root,debug,staticServe}={})->
     res.end content
 
   # /index.js
+  browserify.settings 'basedir',path.resolve __dirname,'..'
   browserify.settings 'transform',[
     'coffeeify'
     ['browserify-ngannotate',{ext:'.coffee'}]
