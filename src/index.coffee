@@ -10,13 +10,14 @@ path= require 'path'
 fs= require 'fs'
 
 # Public
-expressCjs= ({root,debug,staticServe}={})->
+expressCjs= ({root,debug,staticServe,bundleExternal}={})->
   cjs= express.Router()
 
   # Defaults
   root?= process.cwd()
   debug?= process.env.NODE_ENV isnt 'production'
   staticServe?= yes
+  bundleExternal?= false
 
   # /
   cjs.get '/',(req,res)->
@@ -37,9 +38,10 @@ expressCjs= ({root,debug,staticServe}={})->
     ['browserify-ngannotate',{ext:'.coffee'}]
     'browserify-plain-jade'
   ]
-  browserifyMiddleware= browserify root+path.sep+'index.coffee',
+  browserifyMiddleware= browserify root+path.sep+'index.coffee',{
     extensions: ['.coffee']
-    bundleExternal: false
+    bundleExternal
+  }
   cjs.get '/index.js',browserifyMiddleware
 
   # /index.css

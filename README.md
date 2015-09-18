@@ -51,7 +51,7 @@ cjs .
 
 ## API
 
-### `expressCjs({root,debug,staticServe})` -> middleware
+### `expressCjs(options)` -> middleware
 
 * If GET `/` to parse `/index.jade`
 * If GET `/index.js` to parse `/index.coffee` with [ng-annotate][1]
@@ -72,8 +72,16 @@ if(process.env.PORT===undefined){
 }
 var options= {
   root: process.cwd(),
+  // specify the parse location
+
   debug: process.env.NODE_ENV==='production',
-  staticServe: true,// if false then disable static serve
+  // if true, compress & cache result
+
+  staticServe: true,
+  // if true, enable static serve
+
+  bundleExternal: false,
+  // if true, include node_modules
 };
 
 // Setup & Boot
