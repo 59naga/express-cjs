@@ -1,6 +1,6 @@
 {
   "name": "express-cjs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "coffee-script / jade / stylus middleware for Single Page Application on Express4",
 
   "bin": {

@@ -56,6 +56,7 @@ describe 'expressCjs',->
     regexps= [
       /^html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6/ # preface of meyer-reset
       /font-size:10vw/
+      /\}$/ # Not include sourcemap
     ]
 
     supertest app
@@ -64,5 +65,6 @@ describe 'expressCjs',->
     .expect 'Content-type','text/css; charset=utf-8'
     .expect regexps[0]
     .expect regexps[1]
+    .expect regexps[2]
     .end (error,response)->
       if error then done.fail error else done()
