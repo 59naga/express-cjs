@@ -1,6 +1,6 @@
 # ExpressCjs [![NPM version][npm-image]][npm] [![Build Status][travis-image]][travis] [![Coverage Status][coveralls-image]][coveralls]
 
-> coffee-script / jade / stylus(with kouto-swiss) middleware for Single Page Application using Express4
+> coffee-script / jade / stylus middleware for Single Page Application on Express4
 
 ## Quick usage
 
@@ -54,9 +54,12 @@ cjs .
 ### `expressCjs({root,debug,staticServe})` -> middleware
 
 * If GET `/` to parse `/index.jade`
-* If GET `/index.js` to parse `/index.coffee`
-* If GET `/index.css` to parse `/index.styl`
+* If GET `/index.js` to parse `/index.coffee` with [ng-annotate][1]
+* If GET `/index.css` to parse `/index.styl` with [kouto-swiss][2]
 * Otherwise as static serve
+
+[1]: https://github.com/olov/ng-annotate#readme
+[2]: http://kouto-swiss.io/
 
 ```js
 // Dependencies

@@ -33,6 +33,7 @@ expressCjs= ({root,debug,staticServe}={})->
   # /index.js
   browserify.settings 'transform',[
     'coffeeify'
+    ['browserify-ngannotate',{ext:'.coffee'}]
     'browserify-plain-jade'
   ]
   browserifyMiddleware= browserify root+path.sep+'index.coffee',

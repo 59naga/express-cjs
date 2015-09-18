@@ -6,7 +6,6 @@ supertest= require 'supertest'
 path= require 'path'
 
 # Environment
-process.env.NODE_ENV= 'production'
 jasmine.DEFAULT_TIMEOUT_INTERVAL= 5000
 PORT= 59798
 root= path.join __dirname,'fixtures'
@@ -36,9 +35,10 @@ describe 'expressCjs',->
     .end (error,response)->
       if error then done.fail error else done()
       
-  it 'GET /index.js',(done)->
+  it 'GET /index.js(annotated)',(done)->
     regexps= [
-      /this === coffee\(script\);/
+      /this===coffee\(script\)/
+      /.controller\("annotate",\["\$scope",function/
       /<string>of jade<\/string>/
     ]
 
