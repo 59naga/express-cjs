@@ -10,7 +10,7 @@ path= require 'path'
 fs= require 'fs'
 
 # Public
-expressCjs= ({root,debug,staticServe,bundleExternal}={})->
+expressCjs= ({root,debug,bundleExternal}={})->
   cjs= express.Router()
 
   # Defaults
@@ -70,16 +70,6 @@ expressCjs= ({root,debug,staticServe,bundleExternal}={})->
       res.set 'Content-type','text/css'
       res.set 'Content-length',Buffer.byteLength css,'utf8'
       res.end css
-
-  # Setup static files
-  if staticServe
-    cjs.use (req,res,next)->
-      # Fix by https://gist.github.com/59naga/b6bb5cd3ef3e2eb6cc09
-      res.set 'Content-Encoding','gzip' if req.url.match /.gz$/
-      res.set 'Content-Type','text/javascript' if req.url.match /.js.gz$/
-
-      next()
-    cjs.use express.static root
 
   cjs
 

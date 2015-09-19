@@ -2,53 +2,6 @@
 
 > coffee-script / jade / stylus middleware for Single Page Application on Express4
 
-## CLI - Quick usage
-
-```bash
-npm install express-cjs --global
-
-mkdir my-project
-cd my-project
-
-echo "head" > index.jade
-echo "  script(src='index.js')" >> index.jade
-echo "  link(href='index.css' rel='stylesheet')" >> index.jade
-echo "body" >> index.jade
-echo "  h1 world" >> index.jade
-
-more index.jade
-# head
-#   script(src='index.js')
-#   link(href='index.css' rel='stylesheet')
-# body
-#   h1 world
-
-mkdir articles
-
-echo "require('./articles')" > index.coffee
-echo "console.log 'hello?'" > articles/index.coffee
-
-echo "console.log require('./articles/index.jade')" >> index.coffee
-echo "string of jade" > articles/index.jade
-
-echo "meyer-reset()" > index.styl
-echo "@import './articles/**'" >> index.styl
-echo "body{font-size:10vw}" > articles/index.styl
-
-tree .
-# my-project
-# ├── index.coffee
-# ├── index.jade
-# ├── index.styl
-# └── articles
-#     ├── index.coffee
-#     ├── index.jade
-#     └── index.styl
-
-cjs .
-# http://localhost:59798 <- /Users/59naga/Downloads/my-project
-```
-
 ## API
 
 ### `expressCjs(options)` -> middleware
@@ -56,7 +9,6 @@ cjs .
 * If GET `/` to parse `/index.jade`
 * If GET `/index.js` to parse `/index.coffee` with [ng-annotate][1]
 * If GET `/index.css` to parse `/index.styl` with [kouto-swiss][2]
-* Otherwise as static serve
 
 [1]: https://github.com/olov/ng-annotate#readme
 [2]: http://kouto-swiss.io/
@@ -71,17 +23,14 @@ if(process.env.PORT===undefined){
   process.env.PORT= 59798;
 }
 var options= {
-  root: process.cwd(),
   // specify the parse location
+  root: process.cwd(),
 
-  debug: process.env.NODE_ENV==='production',
   // if true, compress & cache result
+  debug: process.env.NODE_ENV==='production',
 
-  staticServe: true,
-  // if true, enable static serve
-
-  bundleExternal: false,
   // if true, include node_modules
+  bundleExternal: false,
 };
 
 // Setup & Boot
@@ -92,21 +41,10 @@ app.listen(process.env.PORT,function(){
 });
 ```
 
-## CLI - Extra usage
-
-if `--onefile`, use [express-onefile](https://github.com/59naga/express-onefile) middleware
-
-```bash
-bower init
-# yes, yes yes...
-bower install angular-ui-router --save
-# ...
-
-cjs . --onefile
-# http://localhost:59798 <- /Users/59naga/Downloads/my-project
-```
-
-Can access `http://localhost:59798/pkgs.min.js` contains `angular.js` and `angular-ui-router.js`
+# Related projects
+* __express-cjs__
+* [express-onefile](https://github.com/59naga/express-onefile#readme)
+* [difficult-http-server](https://github.com/59naga/difficult-http-server#readme)
 
 License
 ---
