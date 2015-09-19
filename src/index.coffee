@@ -16,7 +16,6 @@ expressCjs= ({root,debug,bundleExternal}={})->
   # Defaults
   root?= process.cwd()
   debug?= process.env.NODE_ENV isnt 'production'
-  staticServe?= yes
   bundleExternal?= false
 
   # /
