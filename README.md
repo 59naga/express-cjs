@@ -2,7 +2,7 @@
 
 > coffee-script / jade / stylus middleware for Single Page Application on Express4
 
-## Quick usage
+## CLI - Quick usage
 
 ```bash
 npm install express-cjs --global
@@ -23,24 +23,24 @@ more index.jade
 # body
 #   h1 world
 
-mkdir libs
+mkdir articles
 
-echo "require('./libs')" > index.coffee
-echo "console.log 'hello?'" > libs/index.coffee
+echo "require('./articles')" > index.coffee
+echo "console.log 'hello?'" > articles/index.coffee
 
-echo "console.log require('./libs/index.jade')" >> index.coffee
-echo "string of jade" > libs/index.jade
+echo "console.log require('./articles/index.jade')" >> index.coffee
+echo "string of jade" > articles/index.jade
 
 echo "meyer-reset()" > index.styl
-echo "@import './libs/**'" >> index.styl
-echo "body{font-size:10vw}" > libs/index.styl
+echo "@import './articles/**'" >> index.styl
+echo "body{font-size:10vw}" > articles/index.styl
 
 tree .
 # my-project
 # ├── index.coffee
 # ├── index.jade
 # ├── index.styl
-# └── libs
+# └── articles
 #     ├── index.coffee
 #     ├── index.jade
 #     └── index.styl

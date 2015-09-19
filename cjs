@@ -1,26 +1,48 @@
 #!/usr/bin/env node
 
 // Dependencies
+var commander= require('commander');
+var touch= require('touch');
 var express= require('express');
 var cjs= require('./');
-var minimist= require('minimist');
 var path= require('path');
 
-// Environment
-var args= minimist(process.argv.slice(2))._;// eg: `$ cjs . foo` -> args[0] === 'foo'
+commander
+  .version(require('./package'))
+  .usage('<rootDir>')
+  .option('-p --port <number>','listening port <number>',59798)
 
-var options= {}
-options.root= process.cwd();
-if(args[0]){
-  options.root= path.resolve(process.cwd(),args[0]);
-}
-if(process.env.PORT===undefined){
-  process.env.PORT= 59798;
-}
+commander
+  .command('touch [index]')
+  .description('touch the [index](.coffee .jade .styl)')
+  .action(function(name){
+    if(name==null){
+      name= 'index';
+    }
 
-// Setup & Boot
-var app= express();
-app.use(cjs(options));
-app.listen(process.env.PORT,function(){
-  console.log('http://localhost:%s <- %s',process.env.PORT,options.root);
-});
+    touch.sync(name+'.coffee');
+    touch.sync(name+'.jade');
+    touch.sync(name+'.styl');
+    process.exit(0);
+  })
+  .parse(process.argv)
+
+commander
+  .command('*')
+  .description('boot express-cjs server')
+  .action(function(dirname){
+    // Environment
+    var options= {}
+    options.root= path.resolve(process.cwd(),dirname);
+
+    var app= express();
+    app.use(cjs(options));
+    app.listen(commander.port,function(){
+      console.log('http://localhost:%s <- %s',commander.port,options.root);
+    });
+  })
+
+commander.parse(process.argv)
+if(process.argv.slice(2).length===0){
+  commander.outputHelp()
+}
