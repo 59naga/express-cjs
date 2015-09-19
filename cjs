@@ -1,16 +1,20 @@
 #!/usr/bin/env node
 
+require('coffee-script/register');
+
 // Dependencies
 var commander= require('commander');
 var touch= require('touch');
 var express= require('express');
 var cjs= require('./');
+var onefile= require('express-onefile');
 var path= require('path');
 
 commander
   .version(require('./package'))
   .usage('<rootDir>')
   .option('-p --port <number>','listening port <number>',59798)
+  .option('-o --onefile','enable express-onefile at ./pkgs.js using ./bower.json')
 
 commander
   .command('touch [index]')
@@ -37,6 +41,9 @@ commander
 
     var app= express();
     app.use(cjs(options));
+    if(commander.onefile){
+      app.use(onefile({cwd:options.root}));
+    }
     app.listen(commander.port,function(){
       console.log('http://localhost:%s <- %s',commander.port,options.root);
     });

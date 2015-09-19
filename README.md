@@ -92,6 +92,22 @@ app.listen(process.env.PORT,function(){
 });
 ```
 
+## CLI - Extra usage
+
+if `--onefile`, use [express-onefile](https://github.com/59naga/express-onefile) middleware
+
+```bash
+bower init
+# yes, yes yes...
+bower install angular-ui-router --save
+# ...
+
+cjs . --onefile
+# http://localhost:59798 <- /Users/59naga/Downloads/my-project
+```
+
+Can access `http://localhost:59798/pkgs.min.js` contains `angular.js` and `angular-ui-router.js`
+
 License
 ---
 [MIT][License]
