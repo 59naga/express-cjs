@@ -6,11 +6,36 @@ jade= require 'jade'
 stylus= require 'stylus'
 koutoSwiss= require 'kouto-swiss'
 
+# https://github.com/karlgoldstein/grunt-html2js/issues/53
+through2= require 'through2'
+transformPlainJade= (options={})->
+  (file)->
+    isJade= file.slice(-5) is '.jade'
+
+    data= ''
+    through2 (buffer,encode,next)->
+      return next null,buffer unless isJade
+
+      data+= buffer
+      next()
+
+    ,(next)->
+      return next() unless isJade
+
+      options= JSON.parse JSON.stringify options
+      options.filename= file
+      options.doctype?= 'html'
+
+      safeHTML= JSON.stringify jade.render data,options
+      @push 'module.exports = ' + safeHTML + ';\n'
+
+      next()
+
 path= require 'path'
 fs= require 'fs'
 
 # Public
-expressCjs= ({root,debug,bundleExternal}={})->
+expressCjs= ({root,debug,bundleExternal,jadeOptions}={})->
   cjs= express.Router()
 
   # Defaults
@@ -21,10 +46,10 @@ expressCjs= ({root,debug,bundleExternal}={})->
   # /
   cjs.get '/',(req,res)->
     filename= root+path.sep+'index.jade'
-    options=
-      pretty: debug
-      cache: not debug
-    content= jade.renderFile filename,options
+    jadeOptions?= {}
+    jadeOptions.pretty?= debug
+    jadeOptions.cache?= not debug
+    content= jade.renderFile filename,jadeOptions
 
     res.set 'Content-type','text/html'
     res.set 'Content-length',Buffer.byteLength content,'utf8'
@@ -35,7 +60,7 @@ expressCjs= ({root,debug,bundleExternal}={})->
   browserify.settings 'transform',[
     'coffeeify'
     ['browserify-ngannotate',{ext:'.coffee'}]
-    'browserify-plain-jade'
+    transformPlainJade jadeOptions
   ]
   browserifyMiddleware= browserify root+path.sep+'index.coffee',{
     extensions: ['.coffee']

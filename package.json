@@ -1,6 +1,6 @@
 {
   "name": "express-cjs",
-  "version": "0.0.6",
+  "version": "0.0.7-alpha",
   "description": "coffee-script / jade / stylus middleware for Single Page Application on Express4",
 
   "files": [
@@ -31,7 +31,8 @@
     "express": "^4.13.1",
     "jade": "^1.11.0",
     "kouto-swiss": "^0.11.13",
-    "stylus": "^0.51.1"
+    "stylus": "^0.51.1",
+    "through2": "^2.0.0"
   },
   "devDependencies": {
     "ghooks": "^0.3.2",
