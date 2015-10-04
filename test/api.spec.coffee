@@ -39,7 +39,7 @@ describe 'expressCjs',->
     regexps= [
       /this===coffee\(script\)/
       /.controller\("annotate",\["\$scope",function/
-      /<string>of jade<\/string>/
+      /<string flex>of jade<\/string>/
     ]
 
     supertest app
