@@ -1,67 +1,57 @@
 # Dependencies
+Promise= require 'bluebird'
 express= require 'express'
+prepareResponse= require 'prepare-response'
 
 browserify= require 'browserify-middleware'
 jade= require 'jade'
 stylus= require 'stylus'
 koutoSwiss= require 'kouto-swiss'
 
-# https://github.com/karlgoldstein/grunt-html2js/issues/53
-through2= require 'through2'
-transformPlainJade= (options={})->
-  (file)->
-    isJade= file.slice(-5) is '.jade'
-
-    data= ''
-    through2 (buffer,encode,next)->
-      return next null,buffer unless isJade
-
-      data+= buffer
-      next()
-
-    ,(next)->
-      return next() unless isJade
-
-      options= JSON.parse JSON.stringify options
-      options.filename= file
-      options.doctype?= 'html'
-
-      safeHTML= JSON.stringify jade.render data,options
-      @push 'module.exports = ' + safeHTML + ';\n'
-
-      next()
-
 path= require 'path'
 fs= require 'fs'
 
 # Public
-expressCjs= ({root,debug,bundleExternal,jadeOptions}={})->
+expressCjs= ({root,debug,bundleExternal,jadeOptions,useNgannotate,useJadeify,useBrfs}={})->
   cjs= express.Router()
 
   # Defaults
   root?= process.cwd()
   debug?= process.env.NODE_ENV isnt 'production'
-  bundleExternal?= false
+  bundleExternal?= true
+  useNgannotate?= true
+  useJadeify?= true
+  useBrfs?= true
+
+  # Setup transformers
+  transformers= []
+  transformers.push 'coffeeify'
+  if useNgannotate
+    transformers.push ['browserify-ngannotate',{ext:'.coffee'}]
+  if useJadeify
+    transformers.push ['jadeify',{ext:'.coffee',doctype:'html'}]
+  if useBrfs
+    transformers.push 'brfs'
 
   # /
-  cjs.get '/',(req,res)->
-    filename= root+path.sep+'index.jade'
-    jadeOptions?= {}
-    jadeOptions.pretty?= debug
-    jadeOptions.cache?= not debug
-    content= jade.renderFile filename,jadeOptions
+  htmlPromise= null
+  cjs.get '/',(req,res,next)->
+    htmlPromise= null if debug
+    htmlPromise?= new Promise (resolve)->
+      filename= root+path.sep+'index.jade'
+      jadeOptions?= {}
+      jadeOptions.pretty?= debug
 
-    res.set 'Content-type','text/html'
-    res.set 'Content-length',Buffer.byteLength content,'utf8'
-    res.end content
+      html= jade.renderFile filename,jadeOptions
+      
+      resolve prepareResponse html,{'content-type':'html'}
+
+    htmlPromise.then (prepare)->
+      prepare.send req,res,next
 
   # /index.js
   browserify.settings 'basedir',path.resolve __dirname,'..'
-  browserify.settings 'transform',[
-    'coffeeify'
-    ['browserify-ngannotate',{ext:'.coffee'}]
-    transformPlainJade jadeOptions
-  ]
+  browserify.settings 'transform',transformers
   browserifyMiddleware= browserify root+path.sep+'index.coffee',{
     extensions: ['.coffee']
     bundleExternal
@@ -69,31 +59,28 @@ expressCjs= ({root,debug,bundleExternal,jadeOptions}={})->
   cjs.get '/index.js',browserifyMiddleware
 
   # /index.css
-  cssCache= null
-  cjs.get '/index.css',(req,res)->
-    if cssCache?
-      res.set 'Content-type','text/css'
-      res.set 'Content-length',Buffer.byteLength cssCache,'utf8'
-      res.end cssCache
-      return
+  cssPromise= null
+  cjs.get '/index.css',(req,res,next)->
+    cssPromise= null if debug
+    cssPromise?= new Promise (resolve,reject)->
+      styl= root+path.sep+'index.styl'
+      stylData= fs.readFileSync styl,'utf8'
 
-    styl= root+path.sep+'index.styl'
-    stylData= fs.readFileSync styl,'utf8'
+      stylus stylData
+      .set 'filename',styl
+      .set 'sourcemap',if debug then {inline:yes} else false
+      .set 'compress',not debug
+      .use koutoSwiss()
+      .import 'kouto-swiss'
+      .render (error,css)->
+        unless error
+          resolve prepareResponse css,{'content-type':'css'}
 
-    stylus stylData
-    .set 'filename',styl
-    .set 'sourcemap',if debug then {inline:yes} else false
-    .set 'compress',not debug
-    .use koutoSwiss()
-    .import 'kouto-swiss'
-    .render (error,css)->
-      throw error if error?
+        else
+          reject error
 
-      cssCache?= css unless debug
-
-      res.set 'Content-type','text/css'
-      res.set 'Content-length',Buffer.byteLength css,'utf8'
-      res.end css
+    cssPromise.then (prepare)->
+      prepare.send req,res,next
 
   cjs
 

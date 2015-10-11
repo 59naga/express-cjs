@@ -22,6 +22,7 @@ var cjs= require('express-cjs');
 if(process.env.PORT===undefined){
   process.env.PORT= 59798;
 }
+// Default options
 var options= {
   // specify the parse location
   root: process.cwd(),
@@ -30,7 +31,16 @@ var options= {
   debug: process.env.NODE_ENV==='production',
 
   // if true, include node_modules
-  bundleExternal: false,
+  bundleExternal: true,
+
+  // if true, use `browserify-ngannotate` at /index.coffee
+  useNgannotate: true,
+
+  // if true, use `jadeify` at /index.coffee
+  useJadeify: true,
+
+  // if true, use `brfs` at /index.coffee
+  useBrfs: true,
 };
 
 // Setup & Boot
