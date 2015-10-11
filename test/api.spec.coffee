@@ -3,7 +3,13 @@ expressCjs= require '../src'
 express= require 'express'
 
 supertest= require 'supertest'
+
 path= require 'path'
+fs= require 'fs'
+
+escapeRegExp= (string)->
+  # https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Regular_Expressions
+  string.replace /([.*+?^=!:${}()|[\]\/\\])/g, '\\$1'
 
 # Environment
 jasmine.DEFAULT_TIMEOUT_INTERVAL= 5000
@@ -30,16 +36,27 @@ describe 'expressCjs',->
     supertest app
     .get '/'
     .expect 200
-    .expect 'Content-type','text/html; charset=utf-8'
+    .expect 'Content-type','text/html'
+    .expect 'etag','c1d353fafeefd2f2af7cfbdf2df3a492'
+    .expect 'content-encoding','gzip'
+    .expect 'content-length',108
+    .expect 'date',/.+?/
     .expect regexp
     .end (error,response)->
       if error then done.fail error else done()
       
-  it 'GET /index.js(annotated)',(done)->
+  it 'GET /index.js(use browserify-ngannotate/jadeify/brfs)',(done)->
+    base64text= (fs.readFileSync __dirname+'/fixtures/assets/asset.txt').toString 'base64'
+
     regexps= [
+      # coffeeify
       /this===coffee\(script\)/
+      # browserify-ngannotate
       /.controller\("annotate",\["\$scope",function/
+      # jadeify
       /<string flex>of jade<\/string>/
+      # brfs
+      new RegExp escapeRegExp base64text
     ]
 
     supertest app
@@ -49,6 +66,7 @@ describe 'expressCjs',->
     .expect regexps[0]
     .expect regexps[1]
     .expect regexps[2]
+    .expect regexps[3]
     .end (error,response)->
       if error then done.fail error else done()
 
@@ -62,7 +80,11 @@ describe 'expressCjs',->
     supertest app
     .get '/index.css'
     .expect 200
-    .expect 'Content-type','text/css; charset=utf-8'
+    .expect 'Content-type','text/css'
+    .expect 'etag','ea2b05def8cba306857d3ce80b31c87a'
+    .expect 'content-encoding','gzip'
+    .expect 'content-length',449
+    .expect 'date',/.+?/
     .expect regexps[0]
     .expect regexps[1]
     .expect regexps[2]
