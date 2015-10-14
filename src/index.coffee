@@ -12,20 +12,34 @@ path= require 'path'
 fs= require 'fs'
 
 # Public
-expressCjs= ({cwd,debug,bundleExternal,jadeOptions,useNgannotate,useJadeify,useBrfs}={})->
+expressCjs= ({
+  cwd
+  debug
+  bundleExternal
+  jadeOptions
+  useReactify
+  useNgannotate
+  useJadeify
+  useBrfs
+}={})->
   cjs= express.Router()
 
   # Defaults
   cwd?= process.cwd()
   debug?= process.env.NODE_ENV isnt 'production'
   bundleExternal?= true
+  useReactify?= true
   useNgannotate?= true
   useJadeify?= true
   useBrfs?= true
 
   # Setup transformers
   transformers= []
-  transformers.push 'coffeeify'
+  if useReactify
+    transformers.push 'coffee-reactify'
+  else
+    transformers.push 'coffeeify'
+
   if useNgannotate
     transformers.push ['browserify-ngannotate',{ext:'.coffee'}]
   if useJadeify

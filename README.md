@@ -25,13 +25,16 @@ if(process.env.PORT===undefined){
 // Default options
 var options= {
   // specify the parse location
-  root: process.cwd(),
+  cwd: process.cwd(),
 
   // if true, compress & cache result
   debug: process.env.NODE_ENV==='production',
 
   // if true, include node_modules
   bundleExternal: true,
+
+  // if true, use `coffee-reactify` (do not use `coffeeify`)
+  useReactify: true,
 
   // if true, use `browserify-ngannotate` at /index.coffee
   useNgannotate: true,

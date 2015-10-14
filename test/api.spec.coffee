@@ -51,6 +51,8 @@ describe 'expressCjs',->
     regexps= [
       # coffeeify
       /this===coffee\(script\)/
+      # coffee-react
+      /React.createElement\("div",{className:"commentBox"},/
       # browserify-ngannotate
       /.controller\("annotate",\["\$scope",function/
       # jadeify
@@ -67,6 +69,7 @@ describe 'expressCjs',->
     .expect regexps[1]
     .expect regexps[2]
     .expect regexps[3]
+    .expect regexps[4]
     .end (error,response)->
       if error then done.fail error else done()
 

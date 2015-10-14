@@ -1,7 +1,7 @@
 {
   "name": "express-cjs",
-  "version": "0.0.7-beta",
-  "description": "coffee-script / jade / stylus middleware for Single Page Application on Express4",
+  "version": "0.0.7",
+  "description": "coffee-reactify / jade / stylus middleware for Single Page Application on Express4",
 
   "main": "lib",
   "files": [
@@ -26,6 +26,7 @@
     "brfs": "^1.4.1",
     "browserify-middleware": "^7.0.0",
     "browserify-ngannotate": "^1.0.1",
+    "coffee-reactify": "^4.0.0",
     "coffee-script": "^1.10.0",
     "coffeeify": "^1.1.0",
     "commander": "^2.8.1",
