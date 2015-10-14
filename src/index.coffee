@@ -12,11 +12,11 @@ path= require 'path'
 fs= require 'fs'
 
 # Public
-expressCjs= ({root,debug,bundleExternal,jadeOptions,useNgannotate,useJadeify,useBrfs}={})->
+expressCjs= ({cwd,debug,bundleExternal,jadeOptions,useNgannotate,useJadeify,useBrfs}={})->
   cjs= express.Router()
 
   # Defaults
-  root?= process.cwd()
+  cwd?= process.cwd()
   debug?= process.env.NODE_ENV isnt 'production'
   bundleExternal?= true
   useNgannotate?= true
@@ -38,7 +38,7 @@ expressCjs= ({root,debug,bundleExternal,jadeOptions,useNgannotate,useJadeify,use
   cjs.get '/',(req,res,next)->
     htmlPromise= null if debug
     htmlPromise?= new Promise (resolve)->
-      filename= root+path.sep+'index.jade'
+      filename= cwd+path.sep+'index.jade'
       jadeOptions?= {}
       jadeOptions.pretty?= debug
 
@@ -52,7 +52,7 @@ expressCjs= ({root,debug,bundleExternal,jadeOptions,useNgannotate,useJadeify,use
   # /index.js
   browserify.settings 'basedir',path.resolve __dirname,'..'
   browserify.settings 'transform',transformers
-  browserifyMiddleware= browserify root+path.sep+'index.coffee',{
+  browserifyMiddleware= browserify cwd+path.sep+'index.coffee',{
     extensions: ['.coffee']
     bundleExternal
   }
@@ -63,7 +63,7 @@ expressCjs= ({root,debug,bundleExternal,jadeOptions,useNgannotate,useJadeify,use
   cjs.get '/index.css',(req,res,next)->
     cssPromise= null if debug
     cssPromise?= new Promise (resolve,reject)->
-      styl= root+path.sep+'index.styl'
+      styl= cwd+path.sep+'index.styl'
       stylData= fs.readFileSync styl,'utf8'
 
       stylus stylData

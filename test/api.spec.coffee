@@ -14,7 +14,7 @@ escapeRegExp= (string)->
 # Environment
 jasmine.DEFAULT_TIMEOUT_INTERVAL= 5000
 PORT= 59798
-root= path.join __dirname,'fixtures'
+cwd= path.join __dirname,'fixtures'
 
 # Specs
 describe 'expressCjs',->
@@ -22,7 +22,7 @@ describe 'expressCjs',->
   app= null
   beforeAll (done)->
     app= express()
-    app.use expressCjs {root}
+    app.use expressCjs {cwd}
 
     server= app.listen PORT,done
   afterAll (done)->
