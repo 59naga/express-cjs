@@ -43,7 +43,12 @@ expressCjs= ({
   if useNgannotate
     transformers.push ['browserify-ngannotate',{ext:'.coffee'}]
   if useJadeify
-    transformers.push ['jadeify',{ext:'.coffee',doctype:'html'}]
+    options=
+      runtimePath: require.resolve 'jade/runtime'
+      doctype:'html'
+      ext: '.coffee'
+
+    transformers.push ['jadeify',options]
   if useBrfs
     transformers.push 'brfs'
 
