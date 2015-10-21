@@ -39,8 +39,8 @@ var options= {
   // if true, use `browserify-ngannotate` at /index.coffee
   useNgannotate: true,
 
-  // if true, use `jadeify` at /index.coffee
-  useJadeify: true,
+  // if true, use `plain-jadeify` at /index.coffee
+  usePlainJadeify: true,
 
   // if true, use `brfs` at /index.coffee
   useBrfs: true,

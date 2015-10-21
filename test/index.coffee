@@ -45,7 +45,7 @@ describe 'expressCjs',->
     .end (error,response)->
       if error then done.fail error else done()
       
-  it 'GET /index.js(use browserify-ngannotate/jadeify/brfs)',(done)->
+  it 'GET /index.js(use browserify-ngannotate/plain-jadeify/brfs)',(done)->
     base64text= (fs.readFileSync __dirname+'/fixtures/assets/asset.txt').toString 'base64'
 
     regexps= [
@@ -55,7 +55,7 @@ describe 'expressCjs',->
       /React.createElement\("div",{className:"commentBox"},/
       # browserify-ngannotate
       /.controller\("annotate",\["\$scope",function/
-      # jadeify
+      # plain-jadeify
       /<string flex>of jade<\/string>/
       # brfs
       new RegExp escapeRegExp base64text

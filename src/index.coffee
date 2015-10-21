@@ -19,7 +19,7 @@ expressCjs= ({
   jadeOptions
   useReactify
   useNgannotate
-  useJadeify
+  usePlainJadeify
   useBrfs
 }={})->
   cjs= express.Router()
@@ -30,7 +30,7 @@ expressCjs= ({
   bundleExternal?= true
   useReactify?= true
   useNgannotate?= true
-  useJadeify?= true
+  usePlainJadeify?= true
   useBrfs?= true
 
   # Setup transformers
@@ -42,13 +42,10 @@ expressCjs= ({
 
   if useNgannotate
     transformers.push ['browserify-ngannotate',{ext:'.coffee'}]
-  if useJadeify
-    options=
-      runtimePath: require.resolve 'jade/runtime'
-      doctype:'html'
-      ext: '.coffee'
 
-    transformers.push ['jadeify',options]
+  if usePlainJadeify
+    transformers.push 'plain-jadeify'
+
   if useBrfs
     transformers.push 'brfs'
 
@@ -72,7 +69,7 @@ expressCjs= ({
   browserify.settings 'basedir',path.resolve __dirname,'..'
   browserify.settings 'transform',transformers
   browserifyMiddleware= browserify cwd+path.sep+'index.coffee',{
-    extensions: ['.coffee']
+    extensions: ['.coffee','.cjsx']
     bundleExternal
   }
   cjs.get '/index.js',browserifyMiddleware
