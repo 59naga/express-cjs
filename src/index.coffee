@@ -21,6 +21,7 @@ expressCjs= ({
   useNgannotate
   usePlainJadeify
   useBrfs
+  html5Mode
 }={})->
   cjs= express.Router()
 
@@ -32,6 +33,7 @@ expressCjs= ({
   useNgannotate?= true
   usePlainJadeify?= true
   useBrfs?= true
+  html5Mode?= false
 
   # Setup transformers
   transformers= []
@@ -48,22 +50,6 @@ expressCjs= ({
 
   if useBrfs
     transformers.push 'brfs'
-
-  # /
-  htmlPromise= null
-  cjs.get '/',(req,res,next)->
-    htmlPromise= null if debug
-    htmlPromise?= new Promise (resolve)->
-      filename= cwd+path.sep+'index.jade'
-      jadeOptions?= {}
-      jadeOptions.pretty?= debug
-
-      html= jade.renderFile filename,jadeOptions
-      
-      resolve prepareResponse html,{'content-type':'html'}
-
-    htmlPromise.then (prepare)->
-      prepare.send req,res,next
 
   # /index.js
   browserify.settings 'basedir',path.resolve __dirname,'..'
@@ -97,6 +83,24 @@ expressCjs= ({
 
     cssPromise.then (prepare)->
       prepare.send req,res,next
+
+  # /
+  htmlPromise= null
+  htmlResolver= (req,res,next)->
+    htmlPromise= null if debug
+    htmlPromise?= new Promise (resolve)->
+      filename= cwd+path.sep+'index.jade'
+      jadeOptions?= {}
+      jadeOptions.pretty?= debug
+
+      html= jade.renderFile filename,jadeOptions
+      
+      resolve prepareResponse html,{'content-type':'html'}
+
+    htmlPromise.then (prepare)->
+      prepare.send req,res,next
+  cjs.get '/',htmlResolver
+  cjs.get '*',htmlResolver if html5Mode
 
   cjs
 

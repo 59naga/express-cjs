@@ -1,6 +1,6 @@
 # ExpressCjs [![NPM version][npm-image]][npm] [![Build Status][travis-image]][travis] [![Coverage Status][coveralls-image]][coveralls]
 
-> coffee-script / jade / stylus middleware for Single Page Application on Express4
+> coffee-react / jade / stylus middleware for Single Page Application on Express4
 
 ## API
 
@@ -44,6 +44,9 @@ var options= {
 
   // if true, use `brfs` at /index.coffee
   useBrfs: true,
+
+  // if true, always parse `/index.jade` at 'GET *' (for no matches)
+  html5Mode: false,
 };
 
 // Setup & Boot

@@ -1,7 +1,7 @@
 {
   "name": "express-cjs",
-  "version": "0.0.9",
-  "description": "coffee-reactify / jade / stylus middleware for Single Page Application on Express4",
+  "version": "0.0.10",
+  "description": "coffee-react / jade / stylus middleware for Single Page Application on Express4",
 
   "main": "lib",
   "files": [
@@ -41,6 +41,7 @@
   "devDependencies": {
     "ghooks": "^0.3.2",
     "jasminetea": "^0.2.1",
+    "lodash.escaperegexp": "^3.0.1",
     "object-parser-cli": "0.0.1",
     "supertest": "^1.1.0"
   },
